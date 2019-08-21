@@ -8,12 +8,11 @@
 #include <unordered_map>
 #include <vector>
 
-#define FUSE_USE_VERSION 31
 #include "BPB.h"
 #include "Entity/Entity.h"
 #include "FAT.h"
+#include "FUSEShims.h"
 #include "Helpers/PartitionHelper.h"
-#include "fuse_lowlevel.h"
 
 namespace libFAT {
 namespace Human68k {

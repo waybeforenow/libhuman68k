@@ -2,6 +2,7 @@
 #define LIBFAT_HUMAN68K_HELPERS_DISKHELPER_H_
 
 #include <stdlib.h>
+#include <sys/stat.h>
 #include <sys/types.h>
 
 #include "../BPB.h"

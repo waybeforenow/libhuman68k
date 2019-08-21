@@ -8,9 +8,8 @@
 #include <mutex>
 #include <vector>
 
-#define FUSE_USE_VERSION 31
+#include "FUSEShims.h"
 #include "Partition.h"
-#include "fuse_lowlevel.h"
 
 namespace libFAT {
 namespace Human68k {

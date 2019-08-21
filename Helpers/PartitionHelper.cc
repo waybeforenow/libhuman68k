@@ -5,10 +5,8 @@
 #include <functional>
 #include <vector>
 
+#include "../FUSEShims.h"
 #include "../lib/easyloggingpp/easylogging++.h"
-
-#define FUSE_USE_VERSION 31
-#include "fuse_lowlevel.h"
 
 namespace libFAT {
 namespace Human68k {

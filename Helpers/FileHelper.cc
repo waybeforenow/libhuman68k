@@ -1,6 +1,9 @@
 #include "FileHelper.h"
 
+#include <sys/stat.h>
+
 #include <memory>
+#include <sstream>
 #include <string>
 #include <utility>
 
@@ -46,7 +49,7 @@ size_t FileHelper::Read(char* buf, size_t size, off_t offset) {
       file_,
       ((cluster + 4) * DiskHelper::GetDiskHelper()->BytesPerCluster()) + offset,
       SEEK_CUR);
-  LOG(INFO) << "Seeking to offset " << ftell(file_);
+  LOG(INFO) << "Seeking to offset " << std::hex << ftell(file_);
   while (offset + size > DiskHelper::GetDiskHelper()->BytesPerCluster()) {
     if (feof(file_)) {
       LOG(WARNING) << "Reached unexpected EOF";
@@ -58,9 +61,8 @@ size_t FileHelper::Read(char* buf, size_t size, off_t offset) {
     size -= tret;
     buf += tret;
     offset = 0;
-    LOG(INFO) << "FAT entry at cluster: " << fat_->GetEntry(cluster);
-    LOG(INFO) << "FAT entry at cluster-1: " << fat_->GetEntry(cluster - 1);
-    LOG(INFO) << "FAT entry at cluster-2: " << fat_->GetEntry(cluster - 2);
+    LOG(INFO) << "FAT entry at cluster: " << std::hex
+              << fat_->GetEntry(cluster);
     cluster = fat_->GetEntry(cluster);
     if (cluster == 0x000) {
       LOG(WARNING) << "Reached unexpected OOB on FAT";
@@ -70,7 +72,7 @@ size_t FileHelper::Read(char* buf, size_t size, off_t offset) {
     fseek(file_,
           ((cluster + 4) * DiskHelper::GetDiskHelper()->BytesPerCluster()),
           SEEK_CUR);
-    LOG(INFO) << "Seeking to offset " << ftell(file_);
+    LOG(INFO) << "Seeking to offset " << std::hex << ftell(file_);
   }
 
   // read the remainder of the data
@@ -83,34 +85,55 @@ size_t FileHelper::Read(char* buf, size_t size, off_t offset) {
 }
 
 size_t FileHelper::Write(const char* buf, size_t size, off_t offset) {
+  LOG(INFO) << "Writing " << size << " bytes at offset " << offset;
   size_t cluster = starting_cluster_;
   size_t ret = 0;
 
   while (offset > DiskHelper::GetDiskHelper()->BytesPerCluster()) {
     cluster = fat_->GetEntry(cluster);
+    if (cluster == 0x000) {
+      LOG(WARNING) << "Reached unexpected OOB on FAT";
+      return ret;
+    }
     offset -= DiskHelper::GetDiskHelper()->BytesPerCluster();
   }
 
+  // seek to the starting cluster
   fseek(file_, partition_helper_->GetDataOffset(), SEEK_SET);
   fseek(
       file_,
       ((cluster + 4) * DiskHelper::GetDiskHelper()->BytesPerCluster()) + offset,
       SEEK_CUR);
+  LOG(INFO) << "Seeking to offset " << std::hex << ftell(file_);
   while (offset + size > DiskHelper::GetDiskHelper()->BytesPerCluster()) {
+    if (feof(file_)) {
+      LOG(WARNING) << "Reached unexpected EOF";
+      return ret;
+    }
     size_t tret = fwrite(
         buf, DiskHelper::GetDiskHelper()->BytesPerCluster() - offset, 1, file_);
     ret += tret;
     size -= tret;
     buf += tret;
     offset = 0;
+    LOG(INFO) << "FAT entry at cluster: " << std::hex
+              << fat_->GetEntry(cluster);
     cluster = fat_->GetEntry(cluster);
+    if (cluster == 0x000) {
+      LOG(WARNING) << "Reached unexpected OOB on FAT";
+      return ret;
+    }
     fseek(file_, partition_helper_->GetDataOffset(), SEEK_SET);
     fseek(file_,
           ((cluster + 4) * DiskHelper::GetDiskHelper()->BytesPerCluster()),
           SEEK_CUR);
   }
 
-  // read the remainder of the data
+  // write the remainder of the data
+  if (feof(file_)) {
+    LOG(WARNING) << "Reached unexpected EOF";
+    return ret;
+  }
   ret += fwrite(buf, size, 1, file_);
   return ret;
 }

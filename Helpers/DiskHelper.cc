@@ -1,5 +1,7 @@
 #include "DiskHelper.h"
 
+#include <sys/stat.h>
+
 #include <exception>
 
 #include "PartitionHelper.h"

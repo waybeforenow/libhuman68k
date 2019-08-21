@@ -1,11 +1,9 @@
 #include "Disk.h"
 
 #include <errno.h>
-#include <stdio.h>
 #include <string.h>
 #include <sys/statvfs.h>
 
-#include <functional>
 #include <string>
 
 #include "Helpers/DiskHelper.h"

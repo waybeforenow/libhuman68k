@@ -1,3 +1,5 @@
+#include <sys/stat.h>
+
 #include <memory>
 
 #include "../Helpers/FileHelper.h"

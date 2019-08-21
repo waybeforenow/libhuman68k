@@ -8,11 +8,9 @@
 #include <memory>
 #include <vector>
 
+#include "../FUSEShims.h"
 #include "../Helpers/DirectoryHelper.h"
 #include "../Helpers/FileHelper.h"
-
-#define FUSE_USE_VERSION 31
-#include "fuse_lowlevel.h"
 
 namespace libFAT {
 namespace Human68k {

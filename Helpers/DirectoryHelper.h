@@ -1,10 +1,10 @@
 #ifndef LIBFAT_HUMAN68K_HELPERS_DIRECTORYHELPER_H_
 #define LIBFAT_HUMAN68K_HELPERS_DIRECTORYHELPER_H_
 
-#include "../FAT.h"
+#include <sys/stat.h>
 
-#define FUSE_USE_VERSION 31
-#include "fuse_lowlevel.h"
+#include "../FAT.h"
+#include "../FUSEShims.h"
 
 namespace libFAT {
 namespace Human68k {

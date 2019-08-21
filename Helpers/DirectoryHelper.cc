@@ -1,5 +1,7 @@
 #include "DirectoryHelper.h"
 
+#include <sys/stat.h>
+
 #include "../Entity/Entity.h"
 #include "../lib/easyloggingpp/easylogging++.h"
 #include "DiskHelper.h"

@@ -4,12 +4,10 @@
 
 #include <memory>
 
+#include "FUSEShims.h"
 #include "Helpers/DiskHelper.h"
 #include "Helpers/PartitionHelper.h"
 #include "lib/easyloggingpp/easylogging++.h"
-
-#define FUSE_USE_VERSION 31
-#include "fuse_lowlevel.h"
 
 namespace libFAT {
 namespace Human68k {
@@ -39,7 +37,9 @@ Partition::Partition(FILE* block_fp, PartitionHelper* helper)
   /* Initialize the FAT */
   size_t fat_size = bpb_->FATRegionSize();
   fseek(block_fp_, helper_->GetOffset(), SEEK_SET);
-  fseek(block_fp_, bpb_->FATRegionSector(), SEEK_CUR);
+  // fseek(block_fp_, bpb_->FATRegionSector() * bpb_->BytesPerSector(),
+  // SEEK_CUR);
+  fseek(block_fp_, bpb_->BytesPerSector(), SEEK_CUR);
   char* fat_buf = (char*)calloc(fat_size, sizeof(char));
   fread(fat_buf, 1, fat_size, block_fp_);
   fat_ = new FAT(fat_buf, fat_size);

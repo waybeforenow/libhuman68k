@@ -4,8 +4,9 @@
 #include <functional>
 #include <memory>
 
-#define FUSE_USE_VERSION 31
 #include "../Disk.h"
+
+#define FUSE_USE_VERSION 31
 #include "fuse_lowlevel.h"
 
 namespace libFAT {
