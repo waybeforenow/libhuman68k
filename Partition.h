@@ -17,8 +17,10 @@
 namespace libFAT {
 namespace Human68k {
 
-/* A Partition represents a single logical partition on a disk. It encapsulates
- * its own FAT, BPB, and root Directory.
+/* @brief A single logical partition
+ *
+ * A Partition represents a single logical partition on a disk. It encapsulates
+ * its own FAT, block device file, BPB, PartitionHelper and root Directory.
  */
 class Partition {
  public:

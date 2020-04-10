@@ -46,7 +46,18 @@ void DirectoryHelper::Read(std::vector<Entity*>* entities) {
     LOG(INFO) << "Offset: " << ftell(file_);
     if (i == DiskHelper::GetDiskHelper()->BytesPerCluster() / 32) {
       /* We've reached the end of the cluster; get the next one from the FAT */
-      current_cluster = fat_->GetEntry(current_cluster);
+      LOG(INFO) << "Finding next directory cluster from FAT";
+      LOG(INFO) << "Next directory cluster is " << std::hex
+                << fat_->GetEntry(current_cluster);
+      LOG(INFO) << "Next directory cluster-1: " << std::hex
+                << fat_->GetEntry(current_cluster - 1);
+      LOG(INFO) << "Next directory cluster-2: " << std::hex
+                << fat_->GetEntry(current_cluster - 2);
+      LOG(INFO) << "Next directory cluster-3: " << std::hex
+                << fat_->GetEntry(current_cluster - 3);
+      LOG(INFO) << "Next directory cluster-4: " << std::hex
+                << fat_->GetEntry(current_cluster - 4);
+      current_cluster = fat_->GetEntry(current_cluster - 2);
       fseek(file_, partition_helper_->GetOffset(), SEEK_SET);
       fseek(file_,
             current_cluster * DiskHelper::GetDiskHelper()->BytesPerCluster(),
@@ -142,7 +153,7 @@ void DirectoryHelper::GetAttr(struct stat* attr) const {
   attr->st_mtime = 0;
   attr->st_ctime = 0;
   attr->st_blksize = 1024;
-  attr->st_blocks = 1;
+  attr->st_blocks = 0;
 }
 void DirectoryHelper::SetAttr(struct stat* attr, int to_set) { /* XXX */
 }

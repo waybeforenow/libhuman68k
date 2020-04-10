@@ -6,7 +6,9 @@
 namespace libFAT {
 namespace Human68k {
 
-/* A BPB (Bios Parameter Block) contains some key pieces of metadata about a
+/* @brief Internal representation of a BIOS Parameter Block
+ *
+ * A BPB (BIOS Parameter Block) contains some key pieces of metadata about a
  * disk or partition and needs to be parsed and understood before the FAT can be
  * read.
  *

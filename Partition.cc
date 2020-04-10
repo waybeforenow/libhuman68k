@@ -42,7 +42,7 @@ Partition::Partition(FILE* block_fp, PartitionHelper* helper)
   fseek(block_fp_, bpb_->BytesPerSector(), SEEK_CUR);
   char* fat_buf = (char*)calloc(fat_size, sizeof(char));
   fread(fat_buf, 1, fat_size, block_fp_);
-  fat_ = new FAT(fat_buf, fat_size);
+  fat_ = new FAT(FAT::FAT12, fat_buf, fat_size);
   free(fat_buf);
 
   fat_->DebugPrint();

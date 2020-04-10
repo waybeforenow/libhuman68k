@@ -7,6 +7,7 @@
 #include <string>
 #include <utility>
 
+#include "../FAT.h"
 #include "../lib/easyloggingpp/easylogging++.h"
 #include "PartitionHelper.h"
 

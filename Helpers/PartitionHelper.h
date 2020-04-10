@@ -13,11 +13,18 @@
 namespace libFAT {
 namespace Human68k {
 
+/* @brief Helper class for Partition
+ *
+ * A PartitionHelper is a class used by Partitions, Directories and Files. It
+ * provides shared access to the resources necessary for obtaining a new inode
+ * and registering the inode and file name.
+ */
 class PartitionHelper : public DiskHelper::InstantiatedWithOffset {
  public:
+  ~PartitionHelper();
+
   fuse_ino_t GetNewInode(File* fileptr);
   fuse_ino_t GetNewInode(Directory* dirptr, bool is_root_dir);
-  ~PartitionHelper();
 
   Entity* GetEntity(fuse_ino_t ino);
   Entity* GetEntity(const char* filename);
@@ -26,12 +33,14 @@ class PartitionHelper : public DiskHelper::InstantiatedWithOffset {
 
   size_t GetDataOffset() const { return data_offset_; }
 
- private:
+ protected:
   friend class Disk;
-  friend class Partition;
+  void SetDataOffset(size_t offset) { data_offset_ = offset; }
 
+  friend class Partition;
   PartitionHelper(std::function<fuse_ino_t()> new_inode_fn);
 
+ private:
   off_t partition_number_;
   std::function<fuse_ino_t()> new_inode_fn_;
 
@@ -40,7 +49,6 @@ class PartitionHelper : public DiskHelper::InstantiatedWithOffset {
   std::unordered_map<fuse_ino_t, Directory*> dir_by_inode_;
 
   size_t data_offset_;
-  void SetDataOffset(size_t offset) { data_offset_ = offset; }
 };
 
 }  // namespace Human68k

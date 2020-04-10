@@ -12,8 +12,6 @@ namespace Human68k {
 namespace BPB {
 
 Standard::Standard(const char* structure) {
-  LOG(INFO) << "Standard BPB constructor";
-
   void* tmp_structure = malloc(0x1b);
   memcpy(tmp_structure, structure, 0x1b);
   structure_ = tmp_structure;
@@ -92,8 +90,6 @@ uint64_t Standard::SectorCount() const {
 }
 
 Extended::Extended(const char* structure) {
-  LOG(INFO) << "Extended BPB constructor";
-
   void* tmp_structure = malloc(0x22);
   memcpy(tmp_structure, structure, 0x22);
   structure_ = tmp_structure;

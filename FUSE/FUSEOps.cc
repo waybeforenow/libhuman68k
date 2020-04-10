@@ -238,104 +238,6 @@ void FUSEOps::WriteBuf(fuse_req_t req, fuse_ino_t ino, struct fuse_bufvec *bufv,
   fuse_reply_err(req, ENOSYS);
 }
 
-void FUSEOps::ReadDirPlus(fuse_req_t req, fuse_ino_t ino, size_t size,
-                          off_t off, struct fuse_file_info *fi) {
-  LOG(INFO) << "FUSEOps::ReadDirPlus";
-  /* XXX implement this */
-  fuse_reply_err(req, ENOSYS);
-}
-
-/* ------------------------------- */
-/* Here be unimplemented functions */
-/* ------------------------------- */
-
-void FUSEOps::SetXattr(fuse_req_t req, fuse_ino_t ino, const char *name,
-                       const char *value, size_t size, int flags) {
-  LOG(INFO) << "FUSEOps::SetXattr";
-  fuse_reply_err(req, ENOSYS);
-}
-
-void FUSEOps::GetXattr(fuse_req_t req, fuse_ino_t ino, const char *name,
-                       size_t size) {
-  LOG(INFO) << "FUSEOps::GetXattr";
-  fuse_reply_err(req, ENOSYS);
-}
-
-void FUSEOps::ListXattr(fuse_req_t req, fuse_ino_t ino, size_t size) {
-  LOG(INFO) << "FUSEOps::ListXattr";
-  fuse_reply_err(req, ENOSYS);
-}
-
-void FUSEOps::RemoveXattr(fuse_req_t req, fuse_ino_t ino, const char *name) {
-  LOG(INFO) << "FUSEOps::RemoveXattr";
-  fuse_reply_err(req, ENOSYS);
-}
-
-void FUSEOps::Access(fuse_req_t req, fuse_ino_t ino, int mask) {
-  LOG(INFO) << "FUSEOps::Access";
-  fuse_reply_err(req, ENOSYS);
-}
-
-void FUSEOps::Bmap(fuse_req_t req, fuse_ino_t ino, size_t blocksize,
-                   uint64_t idx) {
-  LOG(INFO) << "FUSEOps::Bmap";
-  fuse_reply_err(req, ENOSYS);
-}
-
-void FUSEOps::FLock(fuse_req_t req, fuse_ino_t ino, struct fuse_file_info *fi,
-                    int op) {
-  LOG(INFO) << "FUSEOps::FLock";
-  fuse_reply_err(req, ENOSYS);
-}
-
-void FUSEOps::FAllocate(fuse_req_t req, fuse_ino_t ino, int mode, off_t offset,
-                        off_t length, struct fuse_file_info *fi) {
-  LOG(INFO) << "FUSEOps::FAllocate";
-  fuse_reply_err(req, ENOSYS);
-}
-
-void FUSEOps::Sync(fuse_req_t req, fuse_ino_t ino, int datasync,
-                   struct fuse_file_info *fi) {
-  LOG(INFO) << "FUSEOps::Sync";
-  fuse_reply_err(req, ENOSYS);
-}
-
-void FUSEOps::ReadLink(fuse_req_t req, fuse_ino_t ino) {
-  LOG(INFO) << "FUSEOps::ReadLink";
-  fuse_reply_err(req, ENOSYS);
-}
-
-void FUSEOps::Symlink(fuse_req_t req, const char *link, fuse_ino_t parent,
-                      const char *name) {
-  LOG(INFO) << "FUSEOps::Symlink";
-  fuse_reply_err(req, ENOSYS);
-}
-
-void FUSEOps::Rename(fuse_req_t req, fuse_ino_t parent, const char *name,
-                     fuse_ino_t newparent, const char *newname,
-                     unsigned int flags) {
-  LOG(INFO) << "FUSEOps::Rename";
-  fuse_reply_err(req, ENOSYS);
-}
-
-void FUSEOps::Link(fuse_req_t req, fuse_ino_t ino, fuse_ino_t newparent,
-                   const char *newname) {
-  LOG(INFO) << "FUSEOps::Link";
-  fuse_reply_err(req, ENOSYS);
-}
-
-void FUSEOps::SyncDir(fuse_req_t req, fuse_ino_t ino, int datasync,
-                      struct fuse_file_info *fi) {
-  LOG(INFO) << "FUSEOps::SyncDir";
-  fuse_reply_err(req, ENOSYS);
-}
-
-void FUSEOps::Poll(fuse_req_t req, fuse_ino_t ino, struct fuse_file_info *fi,
-                   struct fuse_pollhandle *ph) {
-  LOG(INFO) << "FUSEOps::Poll";
-  fuse_reply_err(req, ENOSYS);
-}
-
 const struct fuse_lowlevel_ops FUSEOps::GetLowlevelOps() {
   return {.init = &Init,
           .destroy = &Destroy,
@@ -343,34 +245,19 @@ const struct fuse_lowlevel_ops FUSEOps::GetLowlevelOps() {
           .forget = &Forget,
           .getattr = &GetAttr,
           .setattr = &SetAttr,
-          .readlink = &ReadLink,
           .mknod = &MkNod,
           .mkdir = &MkDir,
           .unlink = &Unlink,
           .rmdir = &RmDir,
-          .symlink = &Symlink,
-          .rename = &Rename,
-          .link = &Link,
           .read = &Read,
           .write = &Write,
           .flush = &Flush,
-          .fsync = &Sync,
           .readdir = &ReadDir,
-          .fsyncdir = &SyncDir,
           .statfs = &StatFs,
-          .setxattr = &SetXattr,
-          .getxattr = &GetXattr,
-          .listxattr = &ListXattr,
-          .removexattr = &RemoveXattr,
-          .access = &Access,
           .ioctl = &IOCtl,
-          .poll = &Poll,
           .write_buf = &WriteBuf,
           .retrieve_reply = &RetrieveReply,
-          .forget_multi = &ForgetMulti,
-          .flock = &FLock,
-          .fallocate = &FAllocate,
-          .readdirplus = &ReadDirPlus};
+          .forget_multi = &ForgetMulti};
 }
 
 }  // namespace Human68k

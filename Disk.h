@@ -14,7 +14,9 @@
 namespace libFAT {
 namespace Human68k {
 
-/* A Disk represents a single disk. It encapsulates one or more partitions. */
+/* @brief A single disk
+ *
+ * A Disk represents a single disk. It encapsulates one or more partitions. */
 class Disk {
  public:
   Disk(const char* block_device);

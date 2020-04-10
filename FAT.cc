@@ -8,18 +8,24 @@
 namespace libFAT {
 namespace Human68k {
 
-FAT::FAT(const void* buffer, size_t fat_size) {
-  for (int i = 0; i < fat_size; i++) {
-    const size_t offset = 3 * i / 2;
-    uint12_t value;
-    if (i % 2 == 0) {
-      value = (((uint8_t*)buffer)[offset + 1] & 0x0f) << 8;
-      value |= ((uint8_t*)buffer)[offset];
-    } else {
-      value = (((uint8_t*)buffer)[offset] & 0xf0) >> 4;
-      value |= ((uint8_t*)buffer)[offset + 1] << 4;
+FAT::FAT(FATType type, const void* buffer, size_t fat_size) {
+  if (type == FAT12) {
+    for (int i = 0; i < fat_size; i++) {
+      const size_t offset = 3 * i / 2;
+      uint12_t value;
+      if (i % 2 == 0) {
+        value = (((uint8_t*)buffer)[offset + 1] & 0x0f) << 8;
+        value |= ((uint8_t*)buffer)[offset];
+      } else {
+        value = (((uint8_t*)buffer)[offset] & 0xf0) >> 4;
+        value |= ((uint8_t*)buffer)[offset + 1] << 4;
+      }
+      entries_.push_back(value);
     }
-    entries_.push_back(value);
+  } else if (type == FAT16) {
+    for (int i = 0; i < fat_size; i++) {
+      entries_.push_back(((uint16_t*)buffer)[i]);
+    }
   }
 }
 
@@ -27,6 +33,7 @@ const FAT::uint12_t FAT::GetEntry(size_t cluster) {
   try {
     return entries_.at(cluster);
   } catch (const std::out_of_range& oob) {
+    LOG(INFO) << "Unexpected OOB on FAT";
     return 0x000;
   }
 }

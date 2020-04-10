@@ -9,6 +9,12 @@
 namespace libFAT {
 namespace Human68k {
 
+/* @brief Internal representation of a FAT
+ *
+ * The FAT class represents a File Allocation Table from the disk image
+ * internally. It provides accessors to traverse the FAT and modifiers to insert
+ * new entries into the FAT.
+ */
 class FAT {
  public:
   using uint12_t = uint16_t;
@@ -17,7 +23,7 @@ class FAT {
     FAT16,
   };
 
-  FAT(const void* buffer, size_t fat_size);
+  FAT(FATType type, const void* buffer, size_t fat_size);
   const uint12_t GetEntry(size_t cluster);
   const uint12_t GetNextFreeEntry();
   void DebugPrint() const;
